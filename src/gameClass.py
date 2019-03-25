@@ -13,6 +13,7 @@ class GameClass():
 
         self.inputHandler = InputHandler()
         self.allSprites = pygame.sprite.Group()
+        
         for i in range(0, config.num_players):
             self.allSprites.add(Player(i, self.inputHandler, self.allSprites))
 

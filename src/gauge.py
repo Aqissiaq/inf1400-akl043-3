@@ -14,7 +14,7 @@ class Gauge(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self, deltaTime):
-        self.rect = self.image.get_rect(center=self.parent.position + (0, 95))
+        self.rect = self.image.get_rect(center=self.parent.position + (0, 60))
         self.image = pygame.transform.scale(self.image, (self.parent.fuel, 10))
 
     def draw(self, screen):

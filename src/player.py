@@ -9,13 +9,15 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
 
         # rocket sprite from https://opengameart.org/content/rocket
-        self.image = pygame.image.load("assets/cohete_off.png")
+        self.image = pygame.image.load("assets/cohete_bw.png")
+        self.image = pygame.transform.scale(self.image, config.player_size)
+        self.image.fill(config.player_color[id], special_flags=pygame.BLEND_MULT)
         self.originalImage = self.image.copy()
-        self.rect = pygame.Rect(0, 0, 0, 0)
+        self.rect = self.image.get_rect()
 
         self.keymap = config.keymaps[id]
         self.id = id
-        self.keyboard = inputHandler
+        self.inputHandler = inputHandler
 
         self.angle = 0
         self.direction = pygame.Vector2(0, -1)
@@ -31,7 +33,7 @@ class Player(pygame.sprite.Sprite):
         """Updates player velocity and position based on input.
         deltatime is time since last update"""
         # inputs
-        keys = self.keyboard.getPressed()
+        keys = self.inputHandler.getPressed()
         right = keys[self.keymap["right"]]
         left = keys[self.keymap["left"]]
         thrust = keys[self.keymap["thrust"]]
@@ -55,6 +57,9 @@ class Player(pygame.sprite.Sprite):
         self.position.y %= config.screen_res[1]
         self.rect.center = self.position
 
+        # check for collisions
+        self.checkForCollisions()
+
 
     def updateRotation(self, left, right, deltaTime):
         """Helper function to handle rotation part of player update"""
@@ -71,7 +76,16 @@ class Player(pygame.sprite.Sprite):
             self.acceleration += self.direction * thrust * config.player_thrust*deltaTime
 
     def shoot(self):
-        Bullet(self, self.groups())
+        Bullet(self, config.player_color[self.id], self.groups())
 
-    def draw(self, screen):
-        pygame.draw.line(screen, (255, 0, 0), self.position, self.position+500*self.velocity)
+    
+    def checkForCollisions(self):
+        hitList = pygame.sprite.spritecollide(self, self.groups()[0], False)
+        for other in hitList:
+            if type(other) is Bullet:
+                self.killForReal()
+
+    def killForReal(self):
+        Player(self.id, self.inputHandler, self.groups())
+        self.fuelBar.kill()
+        self.kill()

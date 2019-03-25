@@ -7,15 +7,17 @@ starting_fuel = 100
 player_thrust = .005
 player_rotation_speed = .5
 max_speed = .9
+player_size = (40, 60)
 
-bullet_speed = 3
+bullet_speed = 2
 fps = 60
 background_color = (0, 0, 0)
-num_players = 1
+num_players = 2
 
-playerColor = [
-    (0,0,0),
-    (0,0,0)
+player_color = [
+    (255,0,0),
+    (0,255,0),
+    (0,0,255)
 ]
 
 keymaps = [{
