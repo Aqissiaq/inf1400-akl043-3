@@ -2,10 +2,32 @@ import pygame
 import config
 from gauge import Gauge
 from bullet import Bullet
+from text import Text
 
-class Player(pygame.sprite.Sprite):
+class Player():
     
-    def __init__(self, id, inputHandler, *groups):
+    def __init__(self, id, inputHandler, screen, *groups):
+        self.rocket = Rocket(id, inputHandler, self, groups)
+
+        self.id = id
+        self.score = 0
+
+        self.scoreText = Text(f"Player {id+1} Score:",
+                        screen,
+                        pygame.font.SysFont(None, 32),
+                        config.player_color[id],
+                        pygame.Vector2(100 + self.id * 200, config.screen_res[1] - 50)
+                        )
+
+    def increaseScore(self, amount):
+        self.score += amount
+
+    def update(self):
+        self.scoreText.draw(self.score)
+
+class Rocket(pygame.sprite.Sprite):
+    
+    def __init__(self, id, inputHandler, parent, *groups):
         super().__init__(groups)
 
         # rocket sprite from https://opengameart.org/content/rocket
@@ -15,13 +37,14 @@ class Player(pygame.sprite.Sprite):
         self.originalImage = self.image.copy()
         self.rect = self.image.get_rect()
 
-        self.keymap = config.keymaps[id]
         self.id = id
+        self.parent = parent
+        self.keymap = config.keymaps[id]
         self.inputHandler = inputHandler
 
         self.angle = 0
         self.direction = pygame.Vector2(0, -1)
-        self.position = pygame.Vector2(400, 400)
+        self.position = config.starting_positions[id]
         self.velocity = pygame.Vector2(0, 0)
         self.acceleration = pygame.Vector2(0, 0)
 
@@ -30,8 +53,10 @@ class Player(pygame.sprite.Sprite):
         self.fuelBar.add(self.groups())
 
     def update(self, deltaTime):
-        """Updates player velocity and position based on input.
-        deltatime is time since last update"""
+        """
+        Updates player velocity and position based on input.
+        deltatime is time since last update
+        """
         # inputs
         keys = self.inputHandler.getPressed()
         right = keys[self.keymap["right"]]
@@ -83,9 +108,16 @@ class Player(pygame.sprite.Sprite):
         hitList = pygame.sprite.spritecollide(self, self.groups()[0], False)
         for other in hitList:
             if type(other) is Bullet:
+                other.increaseScore(config.kill_score)
+                other.kill()
+                self.killForReal()
+            elif type(other) is Player:
                 self.killForReal()
 
     def killForReal(self):
-        Player(self.id, self.inputHandler, self.groups())
+        Rocket(self.id, self.inputHandler, self.parent, self.groups())
         self.fuelBar.kill()
         self.kill()
+
+    def increaseScore(self, amount):
+        self.parent.increaseScore(amount)

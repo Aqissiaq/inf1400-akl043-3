@@ -24,3 +24,6 @@ class Bullet(pygame.sprite.Sprite):
 
     def draw(self, screen):
         pass
+
+    def increaseScore(self, amount):
+        self.parent.increaseScore(amount)

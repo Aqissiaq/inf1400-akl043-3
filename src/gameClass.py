@@ -13,9 +13,13 @@ class GameClass():
 
         self.inputHandler = InputHandler()
         self.allSprites = pygame.sprite.Group()
+        self.playerList = []
         
         for i in range(0, config.num_players):
-            self.allSprites.add(Player(i, self.inputHandler, self.allSprites))
+            newPlayer = Player(i, self.inputHandler, self.screen, self.allSprites)
+            self.playerList.append(newPlayer)
+            self.allSprites.add(newPlayer.rocket)
+
 
     def start(self):
         """Begin the game loop"""
@@ -36,3 +40,5 @@ class GameClass():
         self.inputHandler.update()
         self.allSprites.update(deltaTime)
         self.allSprites.draw(self.screen)
+        for player in self.playerList:
+            player.update()

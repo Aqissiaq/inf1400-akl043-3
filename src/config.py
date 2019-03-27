@@ -1,14 +1,15 @@
 import pygame
 from pygame import Vector2
 
-screen_res = (1920, 1080)
+screen_res = (760, 512)
 gravity = Vector2(0, .0001)
 starting_fuel = 100
-player_thrust = .005
+player_thrust = .0005
 player_rotation_speed = .5
-max_speed = .9
+max_speed = .5
 player_size = (40, 60)
 
+kill_score = 10
 bullet_speed = 2
 fps = 60
 background_color = (0, 0, 0)
@@ -32,4 +33,9 @@ keymaps = [{
         "thrust":pygame.K_w,
         "shoot":pygame.K_SPACE
     }
+]
+
+starting_positions = [
+    (200, 200),
+    (screen_res[0] - 200, 200)
 ]
