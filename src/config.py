@@ -9,6 +9,7 @@ player_rotation_speed = .2
 max_speed = .3
 shoot_delay = 100
 player_size = (40, 60)
+player_lives = 3
 
 kill_score = 10
 bullet_speed = 2

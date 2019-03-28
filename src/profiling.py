@@ -10,7 +10,7 @@ if len(argv) < 3:
 if argv[2] == "True" or argv[2] == 1:
     cProfile.run("main()", argv[1])
 
-p = pstats.Stats("profilerData")
+p = pstats.Stats(argv[1])
 p.strip_dirs()
 p.sort_stats("time")
 p.print_stats(.05)

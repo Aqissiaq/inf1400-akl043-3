@@ -58,6 +58,10 @@ class GameClass():
             self.screen.fill(config.background_color)
             self.update(deltaTime)
 
+            if(len(self.playerList) == 1):
+                print(f"Player {self.playerList[0].id+1} wins!")
+                break
+
 
     def update(self, deltaTime):
         """Called for each tick of the game loop to update all game objects"""
@@ -66,4 +70,6 @@ class GameClass():
         self.allSprites.draw(self.screen)
         for player in self.playerList:
             player.update()
+            if player.dead:
+                self.playerList.remove(player)
         pygame.display.update()

@@ -7,18 +7,26 @@ from terrain import Terrain
 from fuelPlatform import FuelPlatform
 
 class Player():
-    
+    """The handler class for players, keeps track of persistent variables like score and lives"""
     def __init__(self, id, inputHandler, screen, *groups):
         self.rocket = Rocket(id, inputHandler, self, groups)
 
         self.id = id
         self.score = 0
+        self.lives = config.player_lives
+        self.dead = False
 
         self.scoreText = Text(f"Player {id+1} Score:",
                         screen,
                         pygame.font.SysFont(None, 32),
                         config.player_color[id],
-                        pygame.Vector2(100 + self.id * 200, config.screen_res[1] - 50)
+                        pygame.Vector2(100 + self.id * 350, config.screen_res[1] - 50)
+                        )
+        self.livesText = Text("Lives:",
+                        screen,
+                        pygame.font.SysFont(None, 32),
+                        config.player_color[id],
+                        pygame.Vector2(250 + self.id * 350, config.screen_res[1] - 50)
                         )
 
     def increaseScore(self, amount):
@@ -26,9 +34,10 @@ class Player():
 
     def update(self):
         self.scoreText.draw(self.score)
+        self.livesText.draw(self.lives)
 
 class Rocket(pygame.sprite.Sprite):
-    
+    """Class for drawing a player's rocket to screen. Inherits from pygame.sprite.Sprite"""
     def __init__(self, id, inputHandler, parent, *groups):
         super().__init__(groups)
 
@@ -103,15 +112,17 @@ class Rocket(pygame.sprite.Sprite):
     def updateThrust(self, thrust, deltaTime):
         """Helper function to handle thrust part of player update"""
         if(self.fuel > 0):
-            self.fuel -= thrust
+            self.fuel -= thrust*.5
             self.acceleration += self.direction * thrust * config.player_thrust*deltaTime
 
     def shoot(self):
+        """Helper function for firing rockets. Spawns a new Bullet object"""
         self.shootDelay = 0
         Bullet(self, config.player_color[self.id], self.groups())
 
     
     def checkForCollisions(self):
+        """Checks for collisions and handles interaction within the sprite group"""
         hitList = pygame.sprite.spritecollide(self, self.groups()[0], False)
         for other in hitList:
             otherType = type(other)
@@ -126,7 +137,15 @@ class Rocket(pygame.sprite.Sprite):
                 self.fuel = min(self.fuel, config.starting_fuel)
 
     def killForReal(self):
-        Rocket(self.id, self.inputHandler, self.parent, self.groups())
+        """
+        Kills the player object and its fuel gauge.
+        Respawns rocket unless player is out of lives
+        """
+        self.parent.lives -= 1
+        if self.parent.lives > 0:
+            Rocket(self.id, self.inputHandler, self.parent, self.groups())
+        else:
+            self.parent.dead = True
         self.fuelBar.kill()
         self.kill()
 
