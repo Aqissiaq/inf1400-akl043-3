@@ -5,14 +5,17 @@ screen_res = (760, 512)
 gravity = Vector2(0, .0001)
 starting_fuel = 100
 player_thrust = .0005
-player_rotation_speed = .5
-max_speed = .5
+player_rotation_speed = .2
+max_speed = .3
+shoot_delay = 100
 player_size = (40, 60)
 
 kill_score = 10
 bullet_speed = 2
 fps = 60
 background_color = (0, 0, 0)
+terrain_color = (255, 255, 255)
+fuelplatform_color = (0,0,255)
 num_players = 2
 
 player_color = [

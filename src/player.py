@@ -3,6 +3,8 @@ import config
 from gauge import Gauge
 from bullet import Bullet
 from text import Text
+from terrain import Terrain
+from fuelPlatform import FuelPlatform
 
 class Player():
     
@@ -43,6 +45,7 @@ class Rocket(pygame.sprite.Sprite):
         self.inputHandler = inputHandler
 
         self.angle = 0
+        self.shootDelay = config.shoot_delay
         self.direction = pygame.Vector2(0, -1)
         self.position = config.starting_positions[id]
         self.velocity = pygame.Vector2(0, 0)
@@ -64,17 +67,22 @@ class Rocket(pygame.sprite.Sprite):
         thrust = keys[self.keymap["thrust"]]
         shoot = keys[self.keymap["shoot"]]
 
-        if shoot:
-            self.shoot()
+            
         self.acceleration = (0,0)
+        self.acceleration += config.gravity*deltaTime
+        self.checkForCollisions()
+
+        self.shootDelay += deltaTime
+        if shoot and self.shootDelay > config.shoot_delay:
+            self.shoot()
         self.updateRotation(left, right, deltaTime)
         self.updateThrust(thrust, deltaTime)
         
-        # apply gravity and update velocity vector
-        self.acceleration += config.gravity*deltaTime
+
         self.velocity += self.acceleration*deltaTime
         if self.velocity.length() > config.max_speed:
             self.velocity.scale_to_length(config.max_speed)
+        
 
         # update position
         self.position += self.velocity*deltaTime
@@ -82,8 +90,6 @@ class Rocket(pygame.sprite.Sprite):
         self.position.y %= config.screen_res[1]
         self.rect.center = self.position
 
-        # check for collisions
-        self.checkForCollisions()
 
 
     def updateRotation(self, left, right, deltaTime):
@@ -101,18 +107,23 @@ class Rocket(pygame.sprite.Sprite):
             self.acceleration += self.direction * thrust * config.player_thrust*deltaTime
 
     def shoot(self):
+        self.shootDelay = 0
         Bullet(self, config.player_color[self.id], self.groups())
 
     
     def checkForCollisions(self):
         hitList = pygame.sprite.spritecollide(self, self.groups()[0], False)
         for other in hitList:
-            if type(other) is Bullet:
+            otherType = type(other)
+            if otherType is Bullet:
                 other.increaseScore(config.kill_score)
                 other.kill()
                 self.killForReal()
-            elif type(other) is Player:
-                self.killForReal()
+            elif issubclass(otherType, Terrain):
+                self.acceleration = pygame.Vector2(0,0)
+                self.velocity = pygame.Vector2(0,0)
+                self.fuel += (otherType == FuelPlatform)
+                self.fuel = min(self.fuel, config.starting_fuel)
 
     def killForReal(self):
         Rocket(self.id, self.inputHandler, self.parent, self.groups())

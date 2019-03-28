@@ -1,7 +1,10 @@
 import pygame
 import config
 from player import Player
+from terrain import Terrain
+from fuelPlatform import FuelPlatform
 from inputHandler import InputHandler
+from random import randint
 
 class GameClass():
     """The game class for the Mayhem game. Handles pygame initialization and the game loop"""
@@ -12,13 +15,35 @@ class GameClass():
         self.clock = pygame.time.Clock()
 
         self.inputHandler = InputHandler()
-        self.allSprites = pygame.sprite.Group()
+        self.allSprites = pygame.sprite.RenderUpdates()
         self.playerList = []
         
+        for _ in range(randint(5, 10)):
+            self.allSprites.add(Terrain((randint(0, config.screen_res[0]), randint(0, config.screen_res[1])),
+                                        randint(20, 20),
+                                        randint(20, 20),
+                                        config.terrain_color,
+                                        self.allSprites
+                                        )
+                                )
+        self.allSprites.add(FuelPlatform((config.screen_res[0]*.2, config.screen_res[1] - 100),
+                                    40, 20,
+                                    config.fuelplatform_color,
+                                    self.allSprites
+                                    )
+                            )
+        self.allSprites.add(FuelPlatform((config.screen_res[0]*.8, config.screen_res[1] - 100),
+                                    40, 20,
+                                    config.fuelplatform_color,
+                                    self.allSprites
+                                    )
+                            )
+
         for i in range(0, config.num_players):
             newPlayer = Player(i, self.inputHandler, self.screen, self.allSprites)
             self.playerList.append(newPlayer)
             self.allSprites.add(newPlayer.rocket)
+
 
 
     def start(self):
@@ -32,7 +57,6 @@ class GameClass():
             deltaTime = self.clock.get_time()
             self.screen.fill(config.background_color)
             self.update(deltaTime)
-            pygame.display.flip()
 
 
     def update(self, deltaTime):
@@ -42,3 +66,4 @@ class GameClass():
         self.allSprites.draw(self.screen)
         for player in self.playerList:
             player.update()
+        pygame.display.update()
