@@ -1,0 +1,69 @@
+pygame 1.9.4
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Thu Mar 28 17:00:33 2019    profilerData
+
+         530735 function calls (526494 primitive calls) in 42.239 seconds
+
+   Ordered by: internal time
+   List reduced from 1132 to 57 due to restriction <0.05>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     2564   35.022    0.014   35.022    0.014 {method 'tick' of 'Clock' objects}
+    40200    1.542    0.000    1.542    0.000 {method 'blit' of 'pygame.Surface' objects}
+     2564    1.525    0.001    1.525    0.001 {built-in method pygame.display.update}
+     2597    0.768    0.000    0.768    0.000 {method 'fill' of 'pygame.Surface' objects}
+     5130    0.399    0.000    0.399    0.000 {method 'render' of 'pygame.font.Font' objects}
+        1    0.315    0.315    0.315    0.315 {built-in method pygame.base.init}
+        1    0.263    0.263    0.704    0.704 {built-in method pygame.display.set_mode}
+     5142    0.262    0.000    0.262    0.000 {built-in method pygame.transform.rotate}
+     5128    0.164    0.000    0.926    0.000 player.py:58(update)
+     2565    0.144    0.000    0.144    0.000 {built-in method pygame.event.get}
+     2564    0.141    0.000    1.300    0.001 sprite.py:566(draw)
+     5128    0.123    0.000    0.430    0.000 player.py:95(updateRotation)
+     5128    0.100    0.000    0.923    0.000 text.py:21(draw)
+     2564    0.090    0.000    1.225    0.000 sprite.py:452(update)
+        1    0.089    0.089   41.150   41.150 gameClass.py:49(start)
+       21    0.069    0.003    0.069    0.003 {built-in method pygame.imageext.load_extended}
+     2564    0.066    0.000    5.124    0.002 gameClass.py:62(update)
+    11987    0.063    0.000    0.063    0.000 bullet.py:21(update)
+     5128    0.058    0.000    0.248    0.000 player.py:114(checkForCollisions)
+     5128    0.056    0.000    0.082    0.000 sprite.py:1525(<listcomp>)
+     5149    0.054    0.000    0.054    0.000 {built-in method pygame.transform.scale}
+     5128    0.050    0.000    0.114    0.000 gauge.py:16(update)
+    10256    0.049    0.000    0.049    0.000 sprite.py:303(sprites)
+      422    0.045    0.000    0.045    0.000 {built-in method nt.stat}
+     2564    0.037    0.000    0.037    0.000 {built-in method pygame.key.get_pressed}
+    90928    0.036    0.000    0.036    0.000 {method 'colliderect' of 'pygame.Rect' objects}
+    10291    0.036    0.000    0.036    0.000 {method 'get_rect' of 'pygame.Surface' objects}
+   492/82    0.034    0.000    0.100    0.001 sre_parse.py:475(_parse)
+     5128    0.033    0.000    0.148    0.000 sprite.py:1482(spritecollide)
+     2564    0.032    0.000    0.069    0.000 inputHandler.py:8(update)
+       73    0.026    0.000    0.026    0.000 {built-in method marshal.loads}
+     5128    0.024    0.000    0.024    0.000 player.py:103(updateThrust)
+    13355    0.022    0.000    0.022    0.000 sre_parse.py:233(__next)
+     5128    0.021    0.000    0.021    0.000 {method 'rotate_ip' of 'pygame.math.Vector2' objects}
+    47320    0.019    0.000    0.019    0.000 {method 'append' of 'list' objects}
+     5128    0.017    0.000    0.940    0.000 player.py:27(update)
+     5154    0.016    0.000    0.016    0.000 sprite.py:198(groups)
+     5128    0.016    0.000    0.034    0.000 sprite.py:339(__iter__)
+  340/336    0.014    0.000    0.113    0.000 {built-in method builtins.__build_class__}
+   820/78    0.014    0.000    0.040    0.001 sre_compile.py:71(_compile)
+      336    0.013    0.000    0.017    0.000 sre_compile.py:276(_optimize_charset)
+    12001    0.013    0.000    0.033    0.000 sre_parse.py:254(get)
+       73    0.011    0.000    0.017    0.000 <frozen importlib._bootstrap_external>:914(get_data)
+    20622    0.011    0.000    0.011    0.000 {method 'union' of 'pygame.Rect' objects}
+        6    0.010    0.002    0.010    0.002 {built-in method _imp.create_dynamic}
+     1580    0.009    0.000    0.012    0.000 ntpath.py:122(splitdrive)
+        1    0.009    0.009    0.057    0.057 sysfont.py:65(initsysfonts_win32)
+       47    0.008    0.000    0.008    0.000 {built-in method nt.listdir}
+      563    0.008    0.000    0.014    0.000 ntpath.py:178(split)
+     5547    0.008    0.000    0.010    0.000 sre_parse.py:164(__getitem__)
+  954/233    0.007    0.000    0.008    0.000 sre_parse.py:174(getwidth)
+      192    0.006    0.000    0.049    0.000 <frozen importlib._bootstrap_external>:1356(find_spec)
+     5108    0.006    0.000    0.008    0.000 sysfont.py:55(<genexpr>)
+    13303    0.006    0.000    0.006    0.000 {built-in method builtins.isinstance}
+       73    0.006    0.000    0.006    0.000 {method 'read' of '_io.FileIO' objects}
+     6713    0.006    0.000    0.006    0.000 {built-in method builtins.issubclass}
+      438    0.005    0.000    0.005    0.000 {built-in method winreg.EnumValue}
+
+

@@ -18,10 +18,10 @@ class GameClass():
         self.allSprites = pygame.sprite.RenderUpdates()
         self.playerList = []
         
-        for _ in range(randint(5, 10)):
+        for _ in range(randint(1, 5)):
             self.allSprites.add(Terrain((randint(0, config.screen_res[0]), randint(0, config.screen_res[1])),
-                                        randint(20, 20),
-                                        randint(20, 20),
+                                        randint(20, 30),
+                                        randint(15, 20),
                                         config.terrain_color,
                                         self.allSprites
                                         )
