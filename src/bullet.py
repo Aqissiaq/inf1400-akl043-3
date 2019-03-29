@@ -15,15 +15,18 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill(self.color, special_flags=pygame.BLEND_MULT)
         self.rect = self.image.get_rect()
         
-        self.position = pygame.Vector2(parent.position + (config.player_size[1]+10)*parent.direction)
+        self.position = pygame.Vector2(parent.position + (config.player_size[1]+5)*parent.direction)
         self.velocity = pygame.Vector2(parent.direction)*config.bullet_speed
 
     def update(self, deltaTime):
         self.position += self.velocity*deltaTime
         self.rect.center = self.position
-
-    def draw(self, screen):
-        pass
+        
+        if(self.position.x < 0
+            or self.position.x > config.screen_res[0]
+            or self.position.y < 0
+            or self.position.y > config.screen_res[1]):
+            self.kill()
 
     def increaseScore(self, amount):
         self.parent.increaseScore(amount)

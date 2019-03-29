@@ -1,0 +1,48 @@
+1. What is the difference between a class and an object?
+
+    A class defines the properties and behavior of an object, whereas an object is an instance of a class.
+    For example, the "person" class might define a person to have properties like age, eye color and height,
+    while Alice is person object with age = 32, eye color = green, and height = 180cm.
+
+2. What is inheritance? What is the Python syntax?
+
+    Inheritance is a way to implement classes that share properties and behavior with other classes. By inheriting from a
+    parent class, a new class receives all the fields and methods of its parent and can then use this base to expand functionality.
+    This is used to reduce code repetition and provide a logical structure. For example, one might implement a class called "student"
+    which inherits from "person" in (1). This class would still have an age, eye color and height, but might also have other
+    fields like "major" and "beerBudget".
+    The python syntax for this structure is:
+
+    class Student(Person):
+        def __init__(self):
+            super().__init__()
+
+    Here Student inherits from Person and calls Person's initiate-function to initiate its inherited attributes.
+
+3. What is the difference between a has-a and an is-a relationship?
+
+    An is-a relationship refers to inheritance. In the previous example (2), Student has an is-a relationship with Person.
+    This is natural because a student is a person.
+    A has-a relationship refers to objects that contain other objects. If the "beerBudget" in (2) is an object, then the
+    Student class has a has-a relationship with "beerBudget". Again, this is natural because a student has a beer budget.
+
+4. What is encapsulation? How is it handled in Python?
+
+    Encapsulation refers either to the practice of bundling attributes and methods inside objects, or to mechanisms that
+    restrict access to fields and methods within objects.
+    In python, the bundling is done by using the "self" keyword. whereas a variable declared on its own maintains the scope
+    it was declared in, self.[variablName] will tie the variable to the object it is declared inside of.
+    Restriction of access in python is done by convention. By adding "__" to the start of a a variable or method, it is "hidden"
+    by being renamed by adding "_[className]" to their beginning. Such fields or methods /can/ still be accessed from outside
+    the object, but the convention is to use get/set methods instead.
+
+5. What is polymorphism?
+
+    Polymorphism means "occuring in several different forms." In Object Oriented Programming this refers to a situation where
+    several different classes inherit from the same parent class. For example one might extend the example in (2) with a "Programmer"
+    class that also inherits from person. Like Students, this class would inherit all the attributes of a person, but instead
+    of a beer budget and a major they might have a coffe consumption and a favorite language.
+
+    In the mayhem implementation, every object that needs to be drawn on screen inherits from the pygame.sprite.Sprite. This
+    is an example of polymorphism because both rockets and fuel gauges inherit the basic properties of sprites, but they take
+    wildly different forms.
