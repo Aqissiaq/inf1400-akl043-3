@@ -4,7 +4,7 @@ from player import Player
 from terrain import Terrain
 from fuelPlatform import FuelPlatform
 from inputHandler import InputHandler
-from random import randint
+from random import choice
 
 class GameClass():
     """The game class for the Mayhem game. Handles pygame initialization and the game loop"""
@@ -18,26 +18,7 @@ class GameClass():
         self.allSprites = pygame.sprite.RenderUpdates()
         self.playerList = []
         
-        for _ in range(randint(1, 5)):
-            self.allSprites.add(Terrain((randint(0, config.screen_res[0]), randint(0, config.screen_res[1])),
-                                        randint(20, 30),
-                                        randint(15, 20),
-                                        config.terrain_color,
-                                        self.allSprites
-                                        )
-                                )
-        self.allSprites.add(FuelPlatform((config.screen_res[0]*.2, config.screen_res[1] - 100),
-                                    40, 20,
-                                    config.fuelplatform_color,
-                                    self.allSprites
-                                    )
-                            )
-        self.allSprites.add(FuelPlatform((config.screen_res[0]*.8, config.screen_res[1] - 100),
-                                    40, 20,
-                                    config.fuelplatform_color,
-                                    self.allSprites
-                                    )
-                            )
+        self.constructLevel(config.level)
 
         for i in range(0, config.num_players):
             newPlayer = Player(i, self.inputHandler, self.screen, self.allSprites)
@@ -53,7 +34,7 @@ class GameClass():
                 if event.type == pygame.QUIT:
                     exit()
             
-            self.clock.tick(config.fps)
+            self.clock.tick()
             deltaTime = self.clock.get_time()
             self.screen.fill(config.background_color)
             self.update(deltaTime)
@@ -73,3 +54,28 @@ class GameClass():
             if player.dead:
                 self.playerList.remove(player)
         pygame.display.update()
+
+    def constructLevel(self, input):
+        lines = input.split("\n")[1:-1]
+        blockHeight = int(config.screen_res[1] / len(lines))
+        blockWidth = int(config.screen_res[0] / len(lines[0]))
+        terrainColor = choice(config.terrain_colors)
+
+        for x in range(0, len(lines[0])):
+            for y in range(0, len(lines)):
+                if lines[y][x] == "@":
+                    self.allSprites.add(Terrain((x*blockWidth, y*blockHeight),
+                                        blockWidth,
+                                        blockHeight,
+                                        terrainColor,
+                                        self.allSprites
+                                        )
+                                )
+                elif lines[y][x] == "#":
+                    self.allSprites.add(FuelPlatform((x*blockWidth, y*blockHeight),
+                                        blockWidth,
+                                        blockHeight*.5,
+                                        config.fuelplatform_color,
+                                        self.allSprites
+                                        )
+                                )

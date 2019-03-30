@@ -13,7 +13,7 @@ class Text():
         self.font = font
         self.position = position
         self.color = color
-        self.text = self.font.render(label + "  ", True, color)
+        self.text = self.font.render(label + "  ", True, self.color)
         self.textRect = self.text.get_rect()
         self.textRect.centerx = position.x
         self.textRect.centery = position.y

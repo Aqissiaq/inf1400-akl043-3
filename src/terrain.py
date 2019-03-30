@@ -1,5 +1,5 @@
 import pygame
-from bullet import Bullet
+import player
 
 class Terrain(pygame.sprite.Sprite):
     """
@@ -12,10 +12,4 @@ class Terrain(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
-        self.rect.center = position
-
-    def update(self, deltaTime):
-        hitlist = pygame.sprite.spritecollide(self, self.groups()[0], False)
-        for other in hitlist:
-            if type(other) is Bullet:
-                other.kill()
+        self.rect.topleft = position

@@ -5,6 +5,7 @@ from bullet import Bullet
 from text import Text
 from terrain import Terrain
 from fuelPlatform import FuelPlatform
+from explosion import Explosion
 
 class Player():
     """The handler class for players, keeps track of persistent variables like score and lives"""
@@ -20,13 +21,13 @@ class Player():
                         screen,
                         pygame.font.SysFont(None, 32),
                         config.player_color[id],
-                        pygame.Vector2(100 + self.id * 350, config.screen_res[1] - 50)
+                        pygame.Vector2(100 + self.id * 300, config.screen_res[1] - 50)
                         )
         self.livesText = Text("Lives:",
                         screen,
                         pygame.font.SysFont(None, 32),
                         config.player_color[id],
-                        pygame.Vector2(250 + self.id * 350, config.screen_res[1] - 50)
+                        pygame.Vector2(250 + self.id * 300, config.screen_res[1] - 50)
                         )
 
     def increaseScore(self, amount):
@@ -56,7 +57,8 @@ class Rocket(pygame.sprite.Sprite):
         self.angle = 0
         self.shootDelay = config.shoot_delay
         self.direction = pygame.Vector2(0, -1)
-        self.position = config.starting_positions[id]
+        self.position = pygame.Vector2(config.starting_positions[id])
+        self.rect.center = self.position
         self.velocity = pygame.Vector2(0, 0)
         self.acceleration = pygame.Vector2(0, 0)
 
@@ -124,16 +126,18 @@ class Rocket(pygame.sprite.Sprite):
     def checkForCollisions(self):
         """Checks for collisions and handles interaction within the sprite group"""
         hitList = pygame.sprite.spritecollide(self, self.groups()[0], False)
-        for other in hitList:
+        for other in [x for x in hitList if x is not self]:
             otherType = type(other)
             if otherType is Bullet:
                 other.increaseScore(config.kill_score)
                 other.kill()
                 self.killForReal()
-            elif issubclass(otherType, Terrain):
+            elif otherType is Terrain or otherType is Rocket:
+                self.killForReal()
+            elif otherType is FuelPlatform:
                 self.acceleration = pygame.Vector2(0,0)
                 self.velocity = pygame.Vector2(0,0)
-                self.fuel += (otherType == FuelPlatform)
+                self.fuel += 1
                 self.fuel = min(self.fuel, config.starting_fuel)
 
     def killForReal(self):
@@ -146,6 +150,7 @@ class Rocket(pygame.sprite.Sprite):
             Rocket(self.id, self.inputHandler, self.parent, self.groups())
         else:
             self.parent.dead = True
+        Explosion(self.position, self.groups())
         self.fuelBar.kill()
         self.kill()
 

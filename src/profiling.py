@@ -7,7 +7,7 @@ if len(argv) < 3:
     print("Usage: python profiling.py [output file] [run new test(boolean)]")
     exit()
 
-if argv[2] == "True" or argv[2] == 1:
+if argv[2] == "True" or argv[2] == "1":
     cProfile.run("main()", argv[1])
 
 p = pstats.Stats(argv[1])

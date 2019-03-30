@@ -1,5 +1,6 @@
 import pygame
 import config
+from terrain import Terrain
 
 class Bullet(pygame.sprite.Sprite):
 
@@ -10,23 +11,33 @@ class Bullet(pygame.sprite.Sprite):
         self.color = color
 
         self.image = pygame.image.load("assets/cohete_bw.png")
-        self.image = pygame.transform.scale(self.image, (5, 10))
+        self.image = pygame.transform.scale(self.image, (10, 20))
         self.image = pygame.transform.rotate(self.image, parent.angle)
         self.image.fill(self.color, special_flags=pygame.BLEND_MULT)
         self.rect = self.image.get_rect()
         
         self.position = pygame.Vector2(parent.position + (config.player_size[1]+5)*parent.direction)
         self.velocity = pygame.Vector2(parent.direction)*config.bullet_speed
+        self.rect.center = self.position
+
+        self.killed = False
 
     def update(self, deltaTime):
+        self.checkForTerrainCollision()
+        if self.killed:
+            self.kill()
         self.position += self.velocity*deltaTime
         self.rect.center = self.position
-        
-        if(self.position.x < 0
-            or self.position.x > config.screen_res[0]
-            or self.position.y < 0
-            or self.position.y > config.screen_res[1]):
-            self.kill()
+        self.position.x %= config.screen_res[0]
+        self.position.y %= config.screen_res[1]
+
 
     def increaseScore(self, amount):
         self.parent.increaseScore(amount)
+
+    def checkForTerrainCollision(self):
+        if(self.groups()):
+            hitlist = pygame.sprite.spritecollide(self, self.groups()[0], False)
+            for other in hitlist:
+                if type(other) is Terrain:
+                    self.killed = True
