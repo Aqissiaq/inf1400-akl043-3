@@ -14,5 +14,6 @@ class Gauge(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self, deltaTime):
+        """Moves the gauge to follow its parent"""
         self.rect = self.image.get_rect(center=self.parent.position + (0, 60))
         self.image = pygame.transform.scale(self.image, (int(self.parent.fuel), 10))

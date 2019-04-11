@@ -56,6 +56,7 @@ class GameClass():
         pygame.display.update()
 
     def constructLevel(self, input):
+        """Constructs the level from the input in the config file"""
         lines = input.split("\n")[1:-1]
         blockHeight = int(config.screen_res[1] / len(lines))
         blockWidth = int(config.screen_res[0] / len(lines[0]))

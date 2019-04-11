@@ -51,8 +51,8 @@ keymaps = [{
 ]
 
 starting_positions = [
-    (200, 200),
-    (screen_res[0] - 200, 200),
+    (300, 200),
+    (screen_res[0] - 300, 200),
     (screen_res[0]*.5, screen_res[1]*.5)
 ]
 

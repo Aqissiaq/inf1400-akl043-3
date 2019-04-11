@@ -3,7 +3,10 @@ import config
 from terrain import Terrain
 
 class Bullet(pygame.sprite.Sprite):
-
+    """
+    This class is for bullets shot by either player.
+    The parent argument should be the shooting player to attribute score
+    """
     def __init__(self, parent, color=(0,0,255), *groups):
         super().__init__(groups)
 
@@ -23,6 +26,7 @@ class Bullet(pygame.sprite.Sprite):
         self.killed = False
 
     def update(self, deltaTime):
+        """Moves the bullet"""
         self.checkForTerrainCollision()
         if self.killed:
             self.kill()
@@ -36,6 +40,7 @@ class Bullet(pygame.sprite.Sprite):
         self.parent.increaseScore(amount)
 
     def checkForTerrainCollision(self):
+        """Helper function to handle collisions with terrain"""
         if(self.groups()):
             hitlist = pygame.sprite.spritecollide(self, self.groups()[0], False)
             for other in hitlist:
